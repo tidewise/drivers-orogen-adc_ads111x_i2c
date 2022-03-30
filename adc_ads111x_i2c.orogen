@@ -1,6 +1,8 @@
 name "adc_ads111x_i2c"
 version "0.1"
 
+using_library "base-logging"
+
 import_types_from "std"
 import_types_from "raw_io"
 
@@ -11,19 +13,17 @@ task_context "Task" do
     # transition to a setup where all components use a configuration step.
     needs_configuration
 
+    # The i2c bus to use, that is the /dev/ entry
+    property "bus", "/std/string"
+
     # The i2c bus address
     property "address", "int"
 
     # What inputs to read
-    property "inputs", "/std/vector</adc_ads111x_i2c/Input>"
-
-    # Configuration for the chip's gain
-    property "range", "/adc_ads111x_i2c/Range"
-
-    # Sampling rate. Lower rates usually lead to less noise
-    property "rate", "/adc_ads111x_i2c/Rate"
+    property "readings", "/std/vector</adc_ads111x_i2c/Reading>"
 
     output_port "analog_samples", "/std/vector<raw_io/Analog>"
 
+    exception_states :IO_ERROR
     periodic 0.1
 end

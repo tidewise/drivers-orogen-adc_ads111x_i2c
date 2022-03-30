@@ -4,6 +4,8 @@
 #define ADC_ADS111X_I2C_TASK_TASK_HPP
 
 #include "adc_ads111x_i2c/TaskBase.hpp"
+#include <linux/i2c-dev.h>
+#include <linux/i2c.h>
 
 namespace adc_ads111x_i2c{
 
@@ -11,7 +13,7 @@ namespace adc_ads111x_i2c{
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
      * In order to modify the interfaces you should (re)use oroGen and rely on the associated workflow.
-     * 
+     *
      * \details
      * The name of a TaskContext is primarily defined via:
      \verbatim
@@ -25,8 +27,15 @@ namespace adc_ads111x_i2c{
     {
 	friend class TaskBase;
     protected:
+        int mFD = -1;
 
+        std::vector<Reading> mReadings;
+        std::vector<i2c_msg> mTransaction;
+        std::vector<raw_io::Analog> mOutput;
 
+        bool configureReading(Reading const& reading);
+        std::pair<bool, uint16_t> readRegister(uint8_t index);
+        bool writeRegister(uint8_t index, uint16_t value);
 
     public:
         /** TaskContext constructor for Task

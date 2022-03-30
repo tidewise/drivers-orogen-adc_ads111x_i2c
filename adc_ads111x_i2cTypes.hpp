@@ -16,34 +16,40 @@ namespace adc_ads111x_i2c {
      * AIN3
      */
     enum Input {
-        INPUT_AIN1_TO_AIN0 = 0,
-        INPUT_AIN3_TO_AIN0 = 1,
-        INPUT_AIN3_TO_AIN1 = 2,
-        INPUT_AIN3_TO_AIN2 = 3,
-        INPUT_GND_TO_AIN0  = 4,
-        INPUT_GND_TO_AIN1  = 5,
-        INPUT_GND_TO_AIN2  = 6,
-        INPUT_GND_TO_AIN3  = 7
+        INPUT_AIN1_TO_AIN0 = 0x0,
+        INPUT_AIN3_TO_AIN0 = 0x1,
+        INPUT_AIN3_TO_AIN1 = 0x2,
+        INPUT_AIN3_TO_AIN2 = 0x3,
+        INPUT_GND_TO_AIN0  = 0x4,
+        INPUT_GND_TO_AIN1  = 0x5,
+        INPUT_GND_TO_AIN2  = 0x6,
+        INPUT_GND_TO_AIN3  = 0x7
     };
 
     enum Range {
-        RANGE_6144mV,
-        RANGE_4096mV,
-        RANGE_2048mV,
-        RANGE_1024mV,
-        RANGE_0512mV,
-        RANGE_0256mV,
+        RANGE_0256mV = 0x0,
+        RANGE_0512mV = 0x2,
+        RANGE_1024mV = 0x4,
+        RANGE_2048mV = 0x6,
+        RANGE_4096mV = 0x8,
+        RANGE_6144mV = 0xA,
     };
 
     enum Rate {
-        RATE_8HZ,
-        RATE_16HZ,
-        RATE_32HZ,
-        RATE_64HZ,
-        RATE_128HZ,
-        RATE_250HZ,
-        RATE_475HZ,
-        RATE_860HZ
+        RATE_8HZ  = 0x0,
+        RATE_16HZ = 0x2,
+        RATE_32HZ = 0x4,
+        RATE_64HZ = 0x6,
+        RATE_128HZ = 0x8,
+        RATE_250HZ = 0xA,
+        RATE_475HZ = 0xC,
+        RATE_860HZ = 0xE
+    };
+
+    struct Reading {
+        Input input;
+        Range range;
+        Rate rate;
     };
 }
 
