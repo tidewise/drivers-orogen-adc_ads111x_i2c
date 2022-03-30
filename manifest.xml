@@ -1,0 +1,9 @@
+<package>
+  <description brief="interface to a TI ADS111x ADC via userspace i2c support">
+  </description>
+  <author>TideWise SW Team/teams-sw@tidewise.io</author>
+  <license>LGPLv2 or later</license>
+  <depend package="base/cmake" />
+  <depend package="base/orogen/types" />
+  <depend package="drivers/orogen/raw_io" />
+</package>

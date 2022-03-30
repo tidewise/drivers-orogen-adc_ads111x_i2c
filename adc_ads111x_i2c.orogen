@@ -1,0 +1,29 @@
+name "adc_ads111x_i2c"
+version "0.1"
+
+import_types_from "std"
+import_types_from "raw_io"
+
+import_types_from "adc_ads111x_i2cTypes.hpp"
+
+task_context "Task" do
+    # This is the default from now on, and should not be removed. Rock will
+    # transition to a setup where all components use a configuration step.
+    needs_configuration
+
+    # The i2c bus address
+    property "address", "int"
+
+    # What inputs to read
+    property "inputs", "/std/vector</adc_ads111x_i2c/Input>"
+
+    # Configuration for the chip's gain
+    property "range", "/adc_ads111x_i2c/Range"
+
+    # Sampling rate. Lower rates usually lead to less noise
+    property "rate", "/adc_ads111x_i2c/Rate"
+
+    output_port "analog_samples", "/std/vector<raw_io/Analog>"
+
+    periodic 0.1
+end
