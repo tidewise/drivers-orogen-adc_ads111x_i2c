@@ -13,6 +13,7 @@ using namespace std;
 Task::Task(string const& name)
     : TaskBase(name)
 {
+    _timeout.set(base::Time::fromMilliseconds(100));
 }
 
 Task::~Task()
@@ -38,6 +39,16 @@ bool Task::configureHook()
         LOG_ERROR_S
             << "Cannot open " << _bus.get()
             << " for reading and writing" << endl;
+        return false;
+    }
+
+
+    int ret = ioctl(
+        mFD, I2C_TIMEOUT,
+        static_cast<unsigned long>(_timeout.get().toMilliseconds() / 10)
+    );
+    if (ret == -1) {
+        close(mFD);
         return false;
     }
 

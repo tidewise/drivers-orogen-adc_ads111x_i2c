@@ -13,6 +13,9 @@ task_context "Task" do
     # transition to a setup where all components use a configuration step.
     needs_configuration
 
+    # I2C transaction timeout (default 100ms)
+    property "timeout", "/base/Time"
+
     # The i2c bus to use, that is the /dev/ entry
     property "bus", "/std/string"
 
