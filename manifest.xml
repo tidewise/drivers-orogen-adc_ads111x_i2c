@@ -4,6 +4,7 @@
   <author>TideWise SW Team/teams-sw@tidewise.io</author>
   <license>LGPLv2 or later</license>
   <depend package="base/cmake" />
+  <depend package="base/logging" />
   <depend package="base/orogen/types" />
   <depend package="drivers/orogen/raw_io" />
 </package>
