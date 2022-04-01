@@ -27,23 +27,23 @@ namespace adc_ads111x_i2c {
     };
 
     enum Range {
-        RANGE_0256mV = 0x0,
-        RANGE_0512mV = 0x2,
-        RANGE_1024mV = 0x4,
-        RANGE_2048mV = 0x6,
-        RANGE_4096mV = 0x8,
-        RANGE_6144mV = 0xA,
+        RANGE_6144mV = 0x0,
+        RANGE_4096mV = 0x1,
+        RANGE_2048mV = 0x2,
+        RANGE_1024mV = 0x3,
+        RANGE_0512mV = 0x4,
+        RANGE_0256mV = 0x5
     };
 
     enum Rate {
         RATE_8HZ  = 0x0,
-        RATE_16HZ = 0x2,
-        RATE_32HZ = 0x4,
-        RATE_64HZ = 0x6,
-        RATE_128HZ = 0x8,
-        RATE_250HZ = 0xA,
-        RATE_475HZ = 0xC,
-        RATE_860HZ = 0xE
+        RATE_16HZ = 0x1,
+        RATE_32HZ = 0x2,
+        RATE_64HZ = 0x3,
+        RATE_128HZ = 0x4,
+        RATE_250HZ = 0x5,
+        RATE_475HZ = 0x6,
+        RATE_860HZ = 0x7
     };
 
     struct Reading {
