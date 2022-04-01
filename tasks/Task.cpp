@@ -59,12 +59,12 @@ bool Task::configureHook()
 
 static double rangeToScale(Range r) {
     switch(r) {
-        case RANGE_0256mV: return 0.256 / (2 << 15);
-        case RANGE_0512mV: return 0.512 / (2 << 15);
-        case RANGE_1024mV: return 1.024 / (2 << 15);
-        case RANGE_2048mV: return 2.048 / (2 << 15);
-        case RANGE_4096mV: return 4.096 / (2 << 15);
-        case RANGE_6144mV: return 6.144 / (2 << 15);
+        case RANGE_0256mV: return 0.256 / (1 << 15);
+        case RANGE_0512mV: return 0.512 / (1 << 15);
+        case RANGE_1024mV: return 1.024 / (1 << 15);
+        case RANGE_2048mV: return 2.048 / (1 << 15);
+        case RANGE_4096mV: return 4.096 / (1 << 15);
+        case RANGE_6144mV: return 6.144 / (1 << 15);
         default:
             throw std::invalid_argument("invalid Range value");
     }
@@ -93,7 +93,7 @@ void Task::updateHook()
                 return;
             }
 
-            if (r.second & 0x80000) {
+            if (r.second & 0x8000) {
                 break;
             }
         }
@@ -113,7 +113,7 @@ void Task::updateHook()
 
 bool Task::configureReading(Reading const& reading) {
     uint16_t config =
-        CONF_START_ACQUISITION << 15 |  reading.input << 12 | reading.rate << 9 |
+        CONF_START_ACQUISITION << 15 |  reading.input << 12 | reading.range << 9 |
         CONF_SINGLE_SHOT << 8 | reading.rate << 5 | CONF_DISABLE_COMPARATOR << 0;
 
     return writeRegister(1, config);
