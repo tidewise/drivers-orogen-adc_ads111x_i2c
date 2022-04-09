@@ -1,7 +1,7 @@
 #ifndef adc_ads111x_i2c_TYPES_HPP
 #define adc_ads111x_i2c_TYPES_HPP
 
-#include <cstdint>
+#include <stdint.h>
 
 namespace adc_ads111x_i2c {
     /** Input configuration
