@@ -30,10 +30,14 @@ namespace adc_ads111x_i2c{
         int mFD = -1;
 
         std::vector<Reading> mReadings;
-        std::vector<i2c_msg> mTransaction;
+        std::vector<uint8_t> mErrorCount;
         std::vector<raw_io::Analog> mOutput;
 
+        enum Result { OK, ERROR, SKIP };
+
+        Result handleError(bool success, size_t readingIndex);
         bool configureReading(Reading const& reading);
+        bool triggerReading();
         std::pair<bool, uint16_t> readRegister(uint8_t index);
         bool writeRegister(uint8_t index, uint16_t value);
 
