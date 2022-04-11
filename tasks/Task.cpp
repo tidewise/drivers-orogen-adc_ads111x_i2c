@@ -74,6 +74,8 @@ bool Task::startHook()
 {
     if (! TaskBase::startHook())
         return false;
+
+    mErrorCount = vector<uint8_t>(mReadings.size(), 0);
     return true;
 }
 void Task::updateHook()
@@ -81,26 +83,25 @@ void Task::updateHook()
     TaskBase::updateHook();
 
     for (size_t i = 0; i < mReadings.size(); ++i) {
-        if (!configureReading(mReadings[i])) {
-            exception(IO_ERROR);
-            return;
+        bool success = configureReading(mReadings[i]);
+        switch (handleError(success, i)) {
+            case ERROR: return;
+            case SKIP: continue;
+            case OK: ;
         }
 
-        // Now busy-wait for the device to finish reading
-        while(true) {
-            auto r = readRegister(1);
-            if (!r.first) {
-                return;
-            }
-
-            if (r.second & 0x8000) {
-                break;
-            }
+        success = triggerReading();
+        switch (handleError(success, i)) {
+            case ERROR: return;
+            case SKIP: continue;
+            case OK: ;
         }
 
         auto r = readRegister(0);
-        if (!r.first) {
-            return;
+        switch (handleError(r.first, i)) {
+            case ERROR: return;
+            case SKIP: continue;
+            case OK: ;
         }
 
         mOutput[i].time = base::Time::now();
@@ -109,6 +110,34 @@ void Task::updateHook()
     }
 
     _analog_samples.write(mOutput);
+}
+
+bool Task::triggerReading() {
+    while(true) {
+        auto r = readRegister(1);
+        if (!r.first) {
+            return false;
+        }
+
+        if (r.second & 0x8000) {
+            return true;
+        }
+    }
+}
+
+Task::Result Task::handleError(bool ok, size_t readingIndex) {
+    if (ok) {
+        mErrorCount[readingIndex] = 0;
+        return OK;
+    }
+
+    if (++mErrorCount[readingIndex] > mReadings[readingIndex].acceptable_errors) {
+        exception(IO_ERROR);
+        return ERROR;
+    }
+    else {
+        return SKIP;
+    }
 }
 
 bool Task::configureReading(Reading const& reading) {
@@ -136,7 +165,6 @@ bool Task::writeRegister(uint8_t index, uint16_t value) {
     query.nmsgs = 1;
     if (ioctl(mFD, I2C_RDWR, &query) == -1) {
         LOG_ERROR_S << strerror(errno) << std::endl;
-        exception(IO_ERROR);
         return false;
     }
 
@@ -163,7 +191,6 @@ pair<bool, uint16_t> Task::readRegister(uint8_t index) {
     query.nmsgs = 2;
     if (ioctl(mFD, I2C_RDWR, &query) == -1) {
         LOG_ERROR_S << strerror(errno) << std::endl;
-        exception(IO_ERROR);
         return make_pair(false, 0);
     }
 

@@ -60,8 +60,8 @@ enum Rate {
 
 struct Reading {
     Input input;
-    Range range;
-    Rate rate;
+    Range range = RANGE_6144mV;
+    Rate rate = RATE_64HZ;
 };
 
 bool configureReading(int fd, Reading const& reading);
