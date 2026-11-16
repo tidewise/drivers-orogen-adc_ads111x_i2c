@@ -28,5 +28,5 @@ task_context "Task" do
     output_port "analog_samples", "/std/vector<raw_io/Analog>"
 
     exception_states :IO_ERROR
-    periodic 0.1
+    periodic 0.033
 end
